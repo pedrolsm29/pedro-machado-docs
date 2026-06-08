@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cardápio — Dia dos Namorados</title>
+  <link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & base ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:      #F5ECD7;
+      --cream-dark: #E8D5B0;
+      --gold:       #B8860B;
+      --gold-light: #D4A843;
+      --blue-crz:   #003DA5;
+      --red-heart:  #C0392B;
+      --text:       #2C1810;
+      --border:     #C9A96E;
+    }
+
+    body {
+      background: var(--cream);
+      font-family: 'Carlito', 'Calibri Light', Calibri, 'Segoe UI', sans-serif;
+      font-weight: 400;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    /* ── Page container ─────────────────────────────────────────── */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+      padding: 14mm 18mm 14mm;
+    }
+
+    /* ── Cream texture overlay ──────────────────────────────────── */
+    .page::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(212,168,67,.10) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, rgba(184,134,11,.08) 0%, transparent 55%),
+        url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page > * { position: relative; z-index: 1; }
+
+    /* ── Decorative border ──────────────────────────────────────── */
+    .border-frame {
+      border: 2.5px double var(--border);
+      border-radius: 4px;
+      padding: 10mm 12mm;
+      position: relative;
+    }
+    .border-frame::before,
+    .border-frame::after {
+      content: '❧';
+      position: absolute;
+      color: var(--gold);
+      font-size: 22px;
+    }
+    .border-frame::before { top: -14px; left: 50%; transform: translateX(-50%); }
+    .border-frame::after  { bottom: -14px; left: 50%; transform: translateX(-50%) rotate(180deg); }
+
+    /* ── Corner ornaments ───────────────────────────────────────── */
+    .corner { position: absolute; font-size: 18px; color: var(--gold); z-index: 2; }
+    .corner.tl { top: 8mm;  left: 11mm; }
+    .corner.tr { top: 8mm;  right: 11mm; transform: scaleX(-1); }
+    .corner.bl { bottom: 8mm; left: 11mm; transform: scaleY(-1); }
+    .corner.br { bottom: 8mm; right: 11mm; transform: scale(-1); }
+
+    /* ── Symbol strip ───────────────────────────────────────────── */
+    .symbol-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 8px;
+    }
+
+    /* Cruzeiro crest — CSS only */
+    .cruzeiro-crest {
+      width: 48px;
+      height: 56px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cruzeiro-crest svg { width: 48px; height: 56px; }
+
+    /* World Cup trophy — CSS only */
+    .trophy svg { width: 36px; height: 48px; }
+
+    /* Medical icons */
+    .medical-icons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .medical-icons svg { width: 28px; height: 28px; }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    .header { text-align: center; margin-bottom: 10px; }
+
+    .header .date-tag {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .header h1 {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--blue-crz);
+      letter-spacing: 1px;
+      line-height: 1.1;
+    }
+    .header h1 .heart { color: var(--red-heart); }
+
+    .header .subtitle {
+      font-size: 13px;
+      font-style: italic;
+      color: var(--gold);
+      margin-top: 3px;
+      letter-spacing: 1px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0;
+      color: var(--gold);
+      font-size: 13px;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+
+    /* ── Section titles ─────────────────────────────────────────── */
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--blue-crz);
+      border-bottom: 1px solid var(--cream-dark);
+      padding-bottom: 3px;
+      margin: 12px 0 6px;
+    }
+    .section-title .icon { margin-right: 6px; }
+
+    /* ── Menu items ─────────────────────────────────────────────── */
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+      gap: 8px;
+    }
+    .menu-item .dots {
+      flex: 1;
+      border-bottom: 1px dotted var(--border);
+      margin: 0 4px;
+      min-width: 20px;
+    }
+    .item-left { flex-shrink: 0; max-width: 65%; }
+    .item-name { font-weight: 700; font-size: 13px; }
+    .item-desc { font-size: 11px; font-style: italic; color: #6B4F3A; }
+    .item-price { font-size: 13px; font-weight: 700; color: var(--gold); white-space: nowrap; flex-shrink: 0; }
+
+    /* ── Note box ───────────────────────────────────────────────── */
+    .note-box {
+      background: rgba(184,134,11,.07);
+      border-left: 3px solid var(--gold-light);
+      border-radius: 0 4px 4px 0;
+      padding: 6px 10px;
+      font-size: 10.5px;
+      font-style: italic;
+      color: #5A3E28;
+      margin-top: 12px;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 9.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .footer .hearts { font-size: 14px; color: var(--red-heart); letter-spacing: 6px; display: block; margin-bottom: 3px; }
+
+    /* ── Print ──────────────────────────────────────────────────── */
+    @page {
+      size: A4;
+      margin: 0;
+    }
+    @media print {
+      body { background: var(--cream); }
+      .page { margin: 0; width: 100%; min-height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Corner ornaments -->
+  <span class="corner tl">✦</span>
+  <span class="corner tr">✦</span>
+  <span class="corner bl">✦</span>
+  <span class="corner br">✦</span>
+
+  <div class="border-frame">
+
+    <!-- ── Symbol Strip ──────────────────────────────────────── -->
+    <div class="symbol-strip">
+
+      <!-- Cruzeiro Esporte Clube crest (SVG) -->
+      <div class="cruzeiro-crest" title="Cruzeiro Esporte Clube">
+        <svg viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Shield shape -->
+          <path d="M4 4 H44 V36 Q24 54 4 36 Z" fill="#003DA5" stroke="#FFFFFF" stroke-width="1.5"/>
+          <!-- White cross -->
+          <rect x="21" y="7"  width="6" height="28" rx="1" fill="white"/>
+          <rect x="10" y="18" width="28" height="6"  rx="1" fill="white"/>
+          <!-- Southern Cross stars (5 stars) -->
+          <text x="24" y="17" text-anchor="middle" font-size="5" fill="#FFCC00">★</text>
+          <text x="17" y="24" text-anchor="middle" font-size="4" fill="#FFCC00">★</text>
+          <text x="31" y="22" text-anchor="middle" font-size="3.5" fill="#FFCC00">★</text>
+          <text x="20" y="30" text-anchor="middle" font-size="3" fill="#FFCC00">★</text>
+          <text x="29" y="28" text-anchor="middle" font-size="3" fill="#FFCC00">★</text>
+          <!-- Club name ribbon -->
+          <rect x="4" y="44" width="40" height="9" rx="2" fill="#FFCC00"/>
+          <text x="24" y="51" text-anchor="middle" font-size="5.5" font-weight="bold" fill="#003DA5" font-family="Arial,sans-serif">CRUZEIRO</text>
+        </svg>
+      </div>
+
+      <!-- World Cup Trophy (SVG) -->
+      <div class="trophy" title="Copa do Mundo FIFA">
+        <svg viewBox="0 0 36 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Cup body -->
+          <path d="M10 6 Q8 16 11 22 Q14 28 18 30 Q22 28 25 22 Q28 16 26 6 Z" fill="#D4A843" stroke="#B8860B" stroke-width="0.8"/>
+          <!-- Handles -->
+          <path d="M10 9 Q4 9 4 15 Q4 20 10 19" stroke="#B8860B" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M26 9 Q32 9 32 15 Q32 20 26 19" stroke="#B8860B" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Globe detail on cup -->
+          <ellipse cx="18" cy="17" rx="6" ry="7" fill="#C49A2A" stroke="#B8860B" stroke-width="0.5"/>
+          <path d="M12 17 Q15 13 18 17 Q21 21 24 17" stroke="#8B6914" stroke-width="0.6" fill="none"/>
+          <path d="M18 10 Q16 14 18 17 Q20 20 18 24" stroke="#8B6914" stroke-width="0.6" fill="none"/>
+          <!-- Stem -->
+          <rect x="16" y="30" width="4" height="7" rx="1" fill="#B8860B"/>
+          <!-- Base -->
+          <rect x="10" y="37" width="16" height="3.5" rx="1.5" fill="#D4A843" stroke="#B8860B" stroke-width="0.6"/>
+          <rect x="8"  y="40" width="20" height="3"   rx="1.5" fill="#B8860B"/>
+          <!-- Shine -->
+          <path d="M13 9 Q13 18 14 22" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+
+      <!-- Medical Equipment icons (SVG) -->
+      <div class="medical-icons" title="Equipamentos Médicos">
+        <!-- Stethoscope -->
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="14" cy="20" r="4" fill="#003DA5" stroke="#00287A" stroke-width="0.8"/>
+          <circle cx="14" cy="20" r="2" fill="#6699DD"/>
+          <path d="M8 4 Q6 4 6 7 L6 13 Q6 18 10 19 Q13 20 14 16" stroke="#003DA5" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M16 4 Q18 4 18 7 L18 13 Q18 18 14 19 Q13 20 14 16" stroke="#003DA5" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="8"  cy="4" r="2" fill="#C0392B" stroke="#900" stroke-width="0.6"/>
+          <circle cx="16" cy="4" r="2" fill="#C0392B" stroke="#900" stroke-width="0.6"/>
+        </svg>
+        <!-- Syringe -->
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="rotate(-45 14 14)">
+            <rect x="10" y="6"  width="8" height="15" rx="1.5" fill="#B0C8E8" stroke="#003DA5" stroke-width="0.8"/>
+            <rect x="12" y="9"  width="4" height="9"  rx="0.5" fill="rgba(200,0,0,0.35)"/>
+            <rect x="12" y="6"  width="4" height="3"  rx="0.5" fill="#003DA5"/>
+            <rect x="13" y="21" width="2" height="5"  rx="1"   fill="#003DA5"/>
+            <line x1="10" y1="11" x2="8"  y2="11" stroke="#003DA5" stroke-width="0.7"/>
+            <line x1="10" y1="14" x2="8"  y2="14" stroke="#003DA5" stroke-width="0.7"/>
+            <line x1="10" y1="17" x2="8"  y2="17" stroke="#003DA5" stroke-width="0.7"/>
+          </g>
+        </svg>
+        <!-- Pill / Capsule -->
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="rotate(-30 14 14)">
+            <rect x="8" y="11" width="12" height="6" rx="3" fill="#E8E8E8" stroke="#999" stroke-width="0.7"/>
+            <rect x="8" y="11" width="6"  height="6" rx="3" fill="#C0392B"/>
+            <line x1="14" y1="11" x2="14" y2="17" stroke="#999" stroke-width="0.6"/>
+          </g>
+        </svg>
+        <!-- Heartbeat / ECG line -->
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="2,14 7,14 9,8 11,20 13,10 15,18 17,14 26,14" stroke="#C0392B" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+    </div><!-- /symbol-strip -->
+
+    <!-- ── Header ────────────────────────────────────────────── -->
+    <div class="header">
+      <p class="date-tag">12 de Junho · Edição Especial</p>
+      <h1>Cardápio <span class="heart">♥</span> Dia dos Namorados</h1>
+      <p class="subtitle">Uma noite inesquecível a dois</p>
+    </div>
+
+    <div class="divider">✦ &nbsp; ✦ &nbsp; ✦</div>
+
+    <!-- ── Entradas ───────────────────────────────────────────── -->
+    <p class="section-title"><span class="icon">🌿</span> Entradas</p>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Carpaccio de Filé Mignon</p>
+        <p class="item-desc">Alcaparras, rúcula, parmesão e azeite trufado</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 68</span>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Bruschetta de Tomate Confitado</p>
+        <p class="item-desc">Pão artesanal, burrata cremosa e manjericão fresco</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 52</span>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Creme de Abóbora com Gengibre</p>
+        <p class="item-desc">Sementes de abóbora tostadas e azeite de ervas</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 46</span>
+    </div>
+
+    <!-- ── Pratos Principais ──────────────────────────────────── -->
+    <p class="section-title"><span class="icon">🍽</span> Pratos Principais</p>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Medalhão de Filé ao Molho Madeira</p>
+        <p class="item-desc">Purê de mandioquinha, aspargos grelhados e redução de vinho tinto</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 148</span>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Risoto de Camarão com Açafrão</p>
+        <p class="item-desc">Camarões jumbo, caldo de frutos do mar, finalizado com manteiga e parmesão</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 138</span>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Salmão Grelhado com Crosta de Ervas</p>
+        <p class="item-desc">Legumes rôtis, molho de alcaparras e limão siciliano</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 128</span>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Nhoque de Batata Doce ao Pesto</p>
+        <p class="item-desc">Pesto de manjericão, tomates cereja e pinoli tostados <em>(vegetariano)</em></p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 96</span>
+    </div>
+
+    <!-- ── Sobremesas ─────────────────────────────────────────── -->
+    <p class="section-title"><span class="icon">🍮</span> Sobremesas</p>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Petit Gâteau de Chocolate Belga</p>
+        <p class="item-desc">Sorvete de baunilha e calda de framboesa</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 54</span>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Panna Cotta de Maracujá</p>
+        <p class="item-desc">Coulis de frutas vermelhas e flores comestíveis</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 44</span>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Fondant de Caramelo Salgado</p>
+        <p class="item-desc">Fleur de sel, chantilly de baunilha e crocante de amêndoas</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 48</span>
+    </div>
+
+    <!-- ── Bebidas ─────────────────────────────────────────────── -->
+    <p class="section-title"><span class="icon">🥂</span> Bebidas & Harmonizações</p>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Espumante Brut Rosé</p>
+        <p class="item-desc">Taça de boas-vindas inclusa para o casal</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 85 /garrafa</span>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Vinho Tinto Cabernet Sauvignon</p>
+        <p class="item-desc">Reserva Especial — Mendoza, Argentina</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 120 /garrafa</span>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-left">
+        <p class="item-name">Mocktail da Casa</p>
+        <p class="item-desc">Frutas tropicais, espuma de maracujá e água com gás</p>
+      </div>
+      <span class="dots"></span>
+      <span class="item-price">R$ 28</span>
+    </div>
+
+    <div class="divider">· · ·</div>
+
+    <!-- Note box -->
+    <div class="note-box">
+      <strong>Nota da casa:</strong> Todos os pratos são preparados com ingredientes frescos e selecionados.
+      Informe à equipe sobre restrições alimentares ou alergias antes de realizar o pedido.
+      Gorjeta sugerida de 10% não está inclusa no valor dos pratos.
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <span class="hearts">♥ ♥ ♥</span>
+      Reservas: (31) 9 9999-0000 &nbsp;|&nbsp; Belo Horizonte — MG &nbsp;|&nbsp; 12 de junho de 2026
+    </div>
+
+  </div><!-- /border-frame -->
+</div><!-- /page -->
+</body>
+</html>
